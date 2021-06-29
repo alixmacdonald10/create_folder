@@ -17,7 +17,7 @@ def create_structure():
     try:
         # create master folder
         global name
-        name = str(sys.argv[1])    
+        name = str(input("What is the repo name?"))
         global repo_dir
         repo_dir = os.path.join(path, name)
         os.mkdir(repo_dir)
@@ -35,7 +35,7 @@ def create_structure():
         os.chdir(repo_dir)
         file_list = [
             'README.md',
-            '.gitignore'
+            '.gitignore',
             'main.py',
             'test.py',
             '.env'
@@ -84,7 +84,7 @@ def push_repo():
         
 
 def open_vscode():
-    os.popen(f"code -a {repo_dir}")
+    subprocess.Popen(f"code -a {repo_dir}", shell=True)
 
 
 if __name__ == "__main__":
