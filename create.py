@@ -1,5 +1,5 @@
 import sys
-import subprocess
+from subprocess import Popen, PIPE, run
 import os
 from dotenv import load_dotenv
 from github import Github
@@ -10,6 +10,8 @@ load_dotenv()
 path = os.getenv("FILEPATH")
 # access to token generated from github
 token = os.getenv("TOKEN")
+# access to profile
+username = os.getenv("USERNAME")
 
 
 def create_structure():
@@ -64,27 +66,44 @@ def create_repo():
 def push_repo():
     try:
         current_path = repo_dir
-        os.chdir(current_path)   
-        subprocess.Popen([
-            'C://Program Files//Git//git-bash.exe',
-            'git init',
-            'git add .',
-            'git commit -m "project created, initial commit"',
-            'git branch -M main',
-            f'git remote add origin https:///github.com//{user}//{name}.git',
-            'git push origin main'
-            ],
-            shell=True, 
+        os.chdir(current_path)
+        commands = [
+            'git init\n',
+            'git add .\n',
+            'git commit -m "project created, initial commit"\n',
+            'git branch -M main\n',
+            f'git remote add origin https:///github.com//{username}//{name}.git\n',
+            'git push -u origin main\n'
+        ]
+        # create pipeline to feed commands into
+        # process = Popen('C:\\Program Files\\Git\\git-bash.exe', 
+        #                 shell=False,
+        #                 universal_newlines=True,
+        #                 stdin=PIPE,
+        #                 stdout=PIPE,
+        #                 stderr=PIPE
+        #             )
+        # out, err = process.communicate(commands) 
+        process = run([
+            'C:\\Program Files\\Git\\git-bash.exe',
+            'git init\n',
+            'git add .\n',
+            'git commit -m "project created, initial commit"\n',
+            'git branch -M main\n',
+            f'git remote add origin https:///github.com//{username}//{name}.git\n',
+            'git push -u origin main\n'
+            ], 
+            capture_output=True
         )
         print('Succesfully pushed repository to github!')
-         
+        
     except Exception as e:
         print('\nSome error occured while pushing the code!\n')
-        print(e.message, e.args) 
+        print(e.message, e.args)
         
 
 def open_vscode():
-    subprocess.Popen(f"code -a {repo_dir}", shell=True)
+    Popen(f"code -a {repo_dir}", shell=True)
 
 
 if __name__ == "__main__":
