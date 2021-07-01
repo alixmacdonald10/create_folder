@@ -1,13 +1,13 @@
 import sys
 import ctypes
-from subprocess import Popen, PIPE, run
+from subprocess import Popen, PIPE, run, STDOUT
 import os
 import dotenv
 from github import Github
 import pygit2
 
 # log current directory
-creation_directory = os.getcwd()
+creation_directory = os.path.dirname(os.path.realpath(__file__))
 
 # load in the dotenv file
 dotenv_file = dotenv.find_dotenv()
@@ -23,7 +23,7 @@ username = os.getenv("USERNAME")
 
 def mod_dotenv(key, new_value, file):
         os.environ[key] = new_value  # update local environment variable
-        dotenv.set_key(file, key, os.environ[key])  # save to dotenv
+        dotenv.set_key(file, key, os.environ[key])  # save to dotenv file
 
 
 def create_repo():
@@ -46,7 +46,7 @@ def create_repo():
         global repo_dir
         repo_dir = os.path.join(path, name)
         mod_dotenv('REPODIR', repo_dir, dotenv_file)
-        #Clone the newly created repo to local
+        #Clone the newly created repo to local directory
         global repoClone
         repoClone = pygit2.clone_repository(repo.git_url, repo_dir)
         print("Successfully created repository!")
@@ -90,7 +90,7 @@ def create_structure():
 def push_repo():
     try:
         # change current working directory to repo location on local
-        #repo_dir = 'D:\\Scripts\\test'
+        repo_dir = os.getenv("REPODIR")  # FOR DEBUGGING UNHIDE THIS AND COMMENT OUT CREATE_REPO AND CREATE_STURCTURE
         os.chdir(repo_dir)
         # run bash script to push repo
         sh_file = f'{os.path.join(creation_directory, "my_commands.sh")}'
