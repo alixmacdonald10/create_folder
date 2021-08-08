@@ -76,7 +76,8 @@ def create_structure():
             '.gitignore',
             'main.py',
             'test.py',
-            '.env'
+            '.env',
+            'requirements.txt'
         ]
         for file in file_list:
             f = open(file, 'x')
@@ -107,6 +108,10 @@ def open_vscode():
     p2 = Popen(f"code -a {repo_dir}", shell=True)
     p2.wait()
     print('Successfully opened VSCode!')
+    
+
+def create_venv():
+    pass
 
 
 if __name__ == "__main__":
@@ -115,6 +120,8 @@ if __name__ == "__main__":
     create_repo()
     # create folder structure
     create_structure()
+    # create venv
+    create_venv()
     # push repo to github
     push_repo()
     # open vscode
