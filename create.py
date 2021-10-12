@@ -81,6 +81,8 @@ def create_structure():
         ]
         for file in file_list:
             f = open(file, 'x')
+            if file == '.gitignore':
+                f.write('.env')  # add .env to untrack environment variables
             f.close()
         
     except Exception as e:
